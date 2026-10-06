@@ -13,14 +13,22 @@ export default function SDFCanvas({ config, className = '' }) {
 
     // Mount / unmount del motore (una sola volta)
     useEffect(() => {
-        try {
-            engineRef.current = new SDFEngine(canvasRef.current, config);
-            engineRef.current.start();
-        } catch (err) {
-            console.error('[SDFCanvas]', err.message);
-            return;
-        }
+        let mounted = true;
+        // Ritardiamo leggermente l'inizializzazione del motore per assicurarci
+        // che il browser abbia il tempo di disegnare l'interfaccia (il pannello di controllo)
+        const timerId = setTimeout(() => {
+            if (!mounted) return;
+            try {
+                engineRef.current = new SDFEngine(canvasRef.current, config);
+                engineRef.current.start();
+            } catch (err) {
+                console.error('[SDFCanvas]', err.message);
+            }
+        }, 10);
+
         return () => {
+            mounted = false;
+            clearTimeout(timerId);
             engineRef.current?.dispose();
             engineRef.current = null;
         };

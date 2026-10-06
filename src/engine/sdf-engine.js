@@ -8,7 +8,7 @@ const DEFAULT_CONFIG = {
     separation: 0.55,
     colorA: [0.95, 0.4, 0.4],
     colorB: [0.4, 0.6, 0.95],
-    autoRotate: true,
+    autoRotate: false,
     speed: 0.25,          // rad/s
 };
 
